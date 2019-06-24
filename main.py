@@ -77,4 +77,6 @@ def init():
 		print("[UserUpdaterBot] > "+usr['name']+" updated")
 
 if __name__ == "__main__":
-	init()
+	while True:
+		time.sleep(60 * 10)
+		init()
