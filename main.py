@@ -52,26 +52,29 @@ def filterUsers(x):
 		'update': int(time.time()*1000.0)
 	}
 
+def init():
+	client = MongoClient(mongo_uri)
+	coll_users = client.test.users
+	users = list(coll_users.find())
 
-client = MongoClient(mongo_uri)
-coll_users = client.test.users
-users = list(coll_users.find())
+	usersData = getUsersData(users)
+	newUsers = list(map(filterUsers,usersData))
 
-usersData = getUsersData(users)
-newUsers = list(map(filterUsers,usersData))
+	for usr in newUsers:
+		userfilter = { 'steamid': usr['steamid'] }
+		userUpdate = {
+			"$set": {
+					"name": usr['name'],
+					"avatar": usr['avatar'],
+					"armaHours": usr['armaHours'],
+					"url": usr['url'],
+					"ownedServer": usr['ownedServer'],
+					"update": usr['update'],
+				}
+		}
+		coll_users.update_one(userfilter,userUpdate)
 
-for usr in newUsers:
-	userfilter = { 'steamid': usr['steamid'] }
-	userUpdate = {
-		"$set": {
-				"name": usr['name'],
-				"avatar": usr['avatar'],
-				"armaHours": usr['armaHours'],
-				"url": usr['url'],
-				"ownedServer": usr['ownedServer'],
-				"update": usr['update'],
-			}
-	}
-	usrDB = coll_users.update_one(userfilter,userUpdate)
+		print("[UserUpdaterBot] > "+usr['name']+" updated")
 
-	print(usrDB)
+if __name__ == "__main__":
+	init()
