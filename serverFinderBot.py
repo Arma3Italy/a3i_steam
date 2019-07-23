@@ -82,11 +82,11 @@ def main():
     res = res.json()
     res = res['response']['servers']
     res = list(filter(lambda x: re.search(regexFilters, x['name'], re.IGNORECASE),res))
-    res = list(map(parseServer,res))
+    parsedResponse = list(map(parseServer,res))
 
     # res = len(res)
     # print(res[0])
-    print(res)
+    print(parsedResponse)
 
 
 main()
