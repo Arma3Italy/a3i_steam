@@ -82,13 +82,19 @@ def getOnlineServers():
     return res
 
 def main():
-	# client = MongoClient(mongo_uri)
-	# coll_users = client.test.users
-	# users = list(coll_users.find())
+    client = MongoClient(mongo_uri)
+    coll_servers = client.test.servers
+    # servers = list(coll_servers.find())
+    
+    # coll_servers.remove({})
 
     newServers = getOnlineServers()
-
+    
     print(newServers)
 
+    for server in newServers:
+        coll_servers.insert_one(server)
+
+        print("[AddedServer] > "+server['name']+" added")
 
 main()
