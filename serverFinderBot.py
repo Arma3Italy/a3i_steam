@@ -5,7 +5,7 @@ import math
 import re
 
 api_key = '8E5D5A4C69D001BA20C1B71834DD0C56'
-api_filter = '\\appid\\107410\\name_match\\*'
+api_filter = '\\appid\\107410\\name_match\\*ita*'
 regexFilters = "((^ita\\s)|(\\sita\\s)|(\\s?italia?\\s?)|(\\[ita(\/?[a-zA-Z]+)?\\]))"
 api_server = 'https://api.steampowered.com/IGameServersService/GetServerList/v1/?key='+api_key+'&format=json&filter='+api_filter+'&limit=20000'
 mongo_uri = 'mongodb+srv://admin:admin@arma3italy-eufgo.mongodb.net'
@@ -51,7 +51,8 @@ def parseTags(tagArray):
     return tags
 
 def parseServer(server):
-    tags = parseTags(server['gametype'].split(','))
+    tags = parseTags(server['gametype'].split(',')) 
+
     os = 'linux'
     if server['os'] == "w": os = 'windows'
 
@@ -61,7 +62,7 @@ def parseServer(server):
         'name': server['name'],
         'ply': server['players'],
         'maxPly': server['max_players'],
-        'map': server['map'] | 'null',
+        'map': server.get('map', 'null'),
         'os': os,
         'battleEye': tags['b'],
         'difficulty': tags['i'],
@@ -82,7 +83,9 @@ def main():
     res = list(filter(lambda x: re.search(regexFilters, x['name'], re.IGNORECASE),res))
     res = list(map(parseServer,res))
 
-    print(res[0])
+    # res = len(res)
+    # print(res[0])
+    print(res)
 
 
 main()
