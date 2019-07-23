@@ -72,21 +72,23 @@ def parseServer(server):
         'lastUpdate': int(time.time()*1000.0)
     }
 
+def getOnlineServers():
+    res = fetch.get(api_server)
+    res = res.json()
+    res = res['response']['servers']
+    res = list(filter(lambda x: re.search(regexFilters, x['name'], re.IGNORECASE),res))
+    res = list(map(parseServer,res))
+
+    return res
 
 def main():
 	# client = MongoClient(mongo_uri)
 	# coll_users = client.test.users
 	# users = list(coll_users.find())
 
-    res = fetch.get(api_server)
-    res = res.json()
-    res = res['response']['servers']
-    res = list(filter(lambda x: re.search(regexFilters, x['name'], re.IGNORECASE),res))
-    parsedResponse = list(map(parseServer,res))
-
-    # res = len(res)
-    # print(res[0])
-    print(parsedResponse)
+    servers = getOnlineServers()
+    
+    print(servers)
 
 
 main()
