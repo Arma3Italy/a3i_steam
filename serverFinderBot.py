@@ -86,9 +86,9 @@ def main():
 	# coll_users = client.test.users
 	# users = list(coll_users.find())
 
-    servers = getOnlineServers()
-    
-    print(servers)
+    newServers = getOnlineServers()
+
+    print(newServers)
 
 
 main()
