@@ -69,6 +69,7 @@ def parseServer(server):
         'verifysignatures': tags['v'],
         'gametype': tags['t'],
         'country': tags['o'],
+        'lastUpdate': int(time.time()*1000.0)
     }
 
 
